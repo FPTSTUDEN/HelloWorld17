@@ -19,5 +19,7 @@ public class SumOfThreeNumbers {
         System.out.println("The product of the numbers is " + (first * second * third));
         //average
         System.out.println("The average of the numbers is " + ((first + second + third) / 3.0));
+        //close scanner
+        scanner.close();
     }
 }
