@@ -4,7 +4,9 @@ on:
   push:
     branches:
       - main # Triggers when you push to the main branch
-
+# Add this block to grant write permissions to the repository contents
+permissions:
+  contents: write
 jobs:
   build-and-release:
     # Only runs if your commit message starts with "release:" (e.g., "release: A1")
