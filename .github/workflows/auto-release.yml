@@ -34,7 +34,8 @@ jobs:
     - name: Extract Tag Name
       id: get_tag
       run: |
-        COMMIT_MSG="${{ github.event.head_commit.message }}"
+        # COMMIT_MSG="${{ github.event.head_commit.message }}"
+        COMMIT_MSG=$(echo "${{ github.event.head_commit.message }}" | head -n 1)
         TAG_NAME=$(echo "$COMMIT_MSG" | cut -d' ' -f2)
         echo "tag=$TAG_NAME" >> $GITHUB_OUTPUT
 
