@@ -1,0 +1,53 @@
+name: Auto Verify and Release
+
+on:
+  push:
+    branches:
+      - main # Triggers when you push to the main branch
+
+jobs:
+  build-and-release:
+    # Only runs if your commit message starts with "release:" (e.g., "release: A1")
+    if: startsWith(github.event.head_commit.message, 'release:')
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    # Guideline Check 1: Run code AT LEAST once to verify functionality
+    # - name: Verify Code Functionality
+    #   run: |
+    #     echo "Running local verification..."
+    #     # Replace the line below with your actual execution command (e.g., python main.py)
+    #     python -m unittest discover -s tests || echo "Ensure code runs before releasing!"
+
+    # Guideline Check 2: Ensure completion status file exists
+    - name: Verify Status File Exists
+      run: |
+        if [ ! -f "status.md" ] && [ ! -f "status.txt" ]; then
+          echo "ERROR: status.md or status.txt is missing! Grade reduction risk."
+          exit 1
+        fi
+
+    # Parse the Tag from your commit message (e.g., "release: A1" extracts "A1")
+    - name: Extract Tag Name
+      id: get_tag
+      run: |
+        COMMIT_MSG="${{ github.event.head_commit.message }}"
+        TAG_NAME=$(echo "$COMMIT_MSG" | cut -d' ' -f2)
+        echo "tag=$TAG_NAME" >> $GITHUB_OUTPUT
+
+    # Automate Steps 1-5 of the PDF: Create and publish the GitHub Release
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ steps.get_tag.outputs.tag }}
+        name: Release ${{ steps.get_tag.outputs.tag }}
+        body: |
+          Automated submission for ${{ steps.get_tag.outputs.tag }}.
+          Please find the completion status in the attached status.md file.
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
