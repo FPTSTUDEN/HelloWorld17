@@ -7,7 +7,9 @@ param (
 )
 
 $StatusFile = "status.md"
+$CurrentFileDir = Split-Path -Path $MyInvocation.MyCommand.Definition -Parent
 $Prefix="src\main\java"
+$Prefix=Join-Path -Path $CurrentFileDir -ChildPath $Prefix
 
 # Define the path for the exercise and status file
 $ExercisePath = Join-Path -Path $Prefix -ChildPath $ExerciseName
