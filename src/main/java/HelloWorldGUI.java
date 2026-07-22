@@ -19,8 +19,8 @@ public class HelloWorldGUI extends Application {
         // Add button to scene or handle button click event
         flowPane.getChildren().add(button);
         button.setOnAction(e -> {
-            buttonToggled = !buttonToggled;
-            label.setText("Button Clicked! Toggled: " + buttonToggled);
+            // buttonToggled = !buttonToggled;
+            // label.setText("Button Clicked! Toggled: " + buttonToggled);
         });
         scene.setRoot(flowPane);
 
