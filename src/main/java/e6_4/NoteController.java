@@ -8,30 +8,37 @@ import javafx.scene.control.TextField;
 
 public class NoteController {
 
-    @FXML private TextField titleField;
-    @FXML private TextArea contentArea;
-    @FXML private ListView<Note> noteListView;
-    @FXML private Button addButton;
-    @FXML private Button deleteButton;
+    @FXML 
+    private TextField titleField;
+    @FXML 
+    private TextArea contentArea;
+    @FXML 
+    private ListView<Note> noteListView;
+    @FXML 
+    private Button addButton;
+    @FXML 
+    private Button deleteButton;
 
     private final Notebook notebook = new Notebook();
-    private Note selectedNote = null; // Tracks if a note is currently selected for editing
+    private Note selectedNote = null;
 
     @FXML
     public void initialize() {
-        // Bind the Notebook data list to the ListView visual representation
+        // Bind the Notebook data list to the ListView
         noteListView.setItems(notebook.getNotes());
 
         // Listen for selection changes in the list view
-        // noteListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-        //     if (newValue != null) {
-        //         selectedNote = newValue;
-        //         titleField.setText(selectedNote.getTitle());
-        //         contentArea.setText(selectedNote.getContent());
-        //         addButton.setText("Update Note");
-        //         deleteButton.setVisible(true); // Show delete button when an item is selected
-        //     }
-        // });
+        noteListView.getSelectionModel().selectedItemProperty().addListener(
+            (observable, oldValue, newValue) -> {
+                if (newValue != null) {
+                    selectedNote = newValue;
+                    titleField.setText(selectedNote.getTitle());
+                    contentArea.setText(selectedNote.getContent());
+                    addButton.setText("Update Note");
+                    deleteButton.setVisible(true);
+                }
+            }
+        );
     }
 
     @FXML
@@ -41,18 +48,18 @@ public class NoteController {
 
         // Prevent saving notes with missing information
         if (title.isEmpty() || content.isEmpty()) {
-            return; 
+            return;
         }
 
         if (selectedNote == null) {
-            // Context: Create a new Note
+            // Create a new Note
             Note newNote = new Note(title, content);
             notebook.addNote(newNote);
         } else {
-            // Context: Update an existing Note
+            // Update existing Note
             selectedNote.setTitle(title);
             selectedNote.setContent(content);
-            noteListView.refresh(); // Tells UI to redraw changes
+            noteListView.refresh();
         }
 
         handleClearFields();
