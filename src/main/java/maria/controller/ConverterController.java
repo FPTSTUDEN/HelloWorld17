@@ -1,4 +1,7 @@
-package e7_2;
+package maria.controller;
+
+import maria.entity.Currency;
+
 // Controller: ConverterController.java
 public class ConverterController {
     public double convert(double amount, Currency source, Currency target) {

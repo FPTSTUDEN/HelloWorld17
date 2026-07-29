@@ -1,4 +1,4 @@
-package e7_2;
+package maria;
 
 public class Main {
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package e7_2;
+package maria.entity;
 // Model: Currency.java
 public class Currency {
     private final String code;

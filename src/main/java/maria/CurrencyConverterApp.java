@@ -1,4 +1,4 @@
-package e7_2;
+package maria;
 // View + Main: CurrencyConverterApp.java
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -6,6 +6,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import maria.controller.ConverterController;
+import maria.entity.Currency;
 
 public class CurrencyConverterApp extends Application {
     private final ConverterController controller = new ConverterController();
