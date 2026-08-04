@@ -36,6 +36,13 @@
             <artifactId>logback-classic</artifactId>
             <version>1.4.6</version>
         </dependency>
+        <!-- org.junit.jupiter:junit-jupiter -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.9.2</version>
+            <scope>test</scope>
+        </dependency>
         <!-- <dependency> <groupId>org.openjfx</groupId> <artifactId>javafx-base</artifactId> <version>20.0.2</version> </dependency> -->
     </dependencies>
 <build>
