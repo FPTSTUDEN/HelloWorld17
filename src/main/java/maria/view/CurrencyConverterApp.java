@@ -2,6 +2,7 @@ package maria.view;
 
 import maria.controller.ConverterController;
 import maria.entity.Currency;
+import maria.dao.CurrencyDao;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -11,7 +12,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.scene.layout.HBox;
 
-import java.sql.SQLException;
+import jakarta.persistence.PersistenceException;
 import java.util.List;
 
 public class CurrencyConverterApp extends Application {
@@ -71,10 +72,7 @@ public class CurrencyConverterApp extends Application {
         BorderPane.setMargin(title, new Insets(10));
         root.setCenter(grid);
         root.setBottom(buttonBox);
-        // root.setBottom(statusLabel);
-        // set status label to another position
         BorderPane.setMargin(statusLabel, new Insets(10));
-        
 
         // --- Load currencies from database ---
         loadCurrencies();
@@ -87,6 +85,9 @@ public class CurrencyConverterApp extends Application {
         Scene scene = new Scene(root, 450, 300);
         primaryStage.setScene(scene);
         primaryStage.show();
+        
+        // Register shutdown hook to close JPA resources
+        Runtime.getRuntime().addShutdownHook(new Thread(CurrencyDao::close));
     }
 
     private void loadCurrencies() {
@@ -99,16 +100,16 @@ public class CurrencyConverterApp extends Application {
             sourceBox.getItems().addAll(currencies);
             targetBox.getItems().addAll(currencies);
             
-            if (!currencies.isEmpty()) { // Set default selections if currencies are available
+            if (!currencies.isEmpty()) {
                 sourceBox.setValue(currencies.get(0));
-                targetBox.setValue(currencies.size() > 1 ? currencies.get(1) : currencies.get(0)); // Set to second currency if available, otherwise first
+                targetBox.setValue(currencies.size() > 1 ? currencies.get(1) : currencies.get(0));
             }
             
             statusLabel.setText("Currencies loaded successfully");
             statusLabel.setStyle("-fx-text-fill: #006400;");
             resultField.clear();
             
-        } catch (SQLException e) {
+        } catch (PersistenceException e) {
             showError("Database Error", "Could not load currencies from database: " + e.getMessage());
             statusLabel.setText("Failed to load currencies");
             statusLabel.setStyle("-fx-text-fill: #ff0000;");
@@ -140,7 +141,7 @@ public class CurrencyConverterApp extends Application {
             showError("Error", "Please enter a valid number.");
             statusLabel.setText("Invalid input");
             statusLabel.setStyle("-fx-text-fill: #ff0000;");
-        } catch (SQLException ex) {
+        } catch (PersistenceException ex) {
             showError("Database Error", "Could not perform conversion: " + ex.getMessage());
             statusLabel.setText("Conversion failed - database error");
             statusLabel.setStyle("-fx-text-fill: #ff0000;");
