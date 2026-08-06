@@ -6,11 +6,11 @@ public class ShoppingCart {
     private Map<String, Double> items = new HashMap<>();
 
     public void addItem(String name, double price) {
-        // not yet implemented
+        items.put(name, price);
     }
 
     public void removeItem(String name) {
-        // not yet implemented
+        items.remove(name);
     }
 
     public int getItemCount() {
@@ -18,6 +18,7 @@ public class ShoppingCart {
     }
 
     public double calculateTotal() {
-        return 0.0; // placeholder
+        return items.values().stream().mapToDouble(Double::doubleValue).sum();
+        // Double::doubleValue is a method reference that converts Double objects to primitive double values.
     }
 }
